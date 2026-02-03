@@ -50,15 +50,15 @@ class DataLoader:
             FROM {table_name}
         """
         conditions = []
-        dt = datetime.strptime(start_date, "%Y-%m-%d")
-        start_timestamp = int(datetime(year=dt.year, month=dt.month, day=dt.day, hour=6, minute=0).timestamp()) * 1000
-        dt = datetime.strptime(end_date, "%Y-%m-%d")
-        end_timestamp = int(datetime(year=dt.year, month=dt.month, day=dt.day, hour=6, minute=0).timestamp()) * 1000
 
         # Add date filtering if provided
         if start_date:
+            dt = datetime.strptime(start_date, "%Y-%m-%d")
+            start_timestamp = int(datetime(year=dt.year, month=dt.month, day=dt.day, hour=6, minute=0).timestamp()) * 1000
             conditions.append(f"timestamp >= '{start_timestamp}'")
         if end_date:
+            dt = datetime.strptime(end_date, "%Y-%m-%d")
+            end_timestamp = int(datetime(year=dt.year, month=dt.month, day=dt.day, hour=6, minute=0).timestamp()) * 1000
             conditions.append(f"timestamp <= '{end_timestamp}'")
         if conditions:
             query += " WHERE " + " AND ".join(conditions)
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     loader = DataLoader()
 
     # Load data from the `prices` table with optional date filters
-    data = loader.load_data("prices", start_date="2025-01-01", end_date="2026-01-31")
-
+    data = loader.load_data("gold_prices", start_date="2025-01-01", end_date="2026-01-31")
+    data.to_csv('gold_prices.csv')
     # Display the first few rows of the data
     print(data.head())
